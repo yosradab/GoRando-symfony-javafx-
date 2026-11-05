@@ -1,179 +1,54 @@
-💻 Symfony + JavaFX: Avis et Réclamations Management 📝
+# Gestion des Réclamations & Avis — Client JavaFX
 
-This repository implements a complete, full-stack solution for managing customer Reviews (Avis) and formal Claims (Réclamations).
+Application de bureau **JavaFX** pour gérer les **réclamations**, les **avis** sur les articles et les **réponses** aux clients. Elle partage la base MySQL du module web Symfony [ClaimManagement](https://github.com/yosradab/ClaimManagement).
 
-The architecture separates concerns into two primary components: a powerful Symfony web API for persistence, and a responsive JavaFX desktop client for user interaction.
+Projet académique réalisé à ESPRIT (projet intégré PIDEV, volet Java).
 
-🧭 Table of Contents
+## Fonctionnalités
 
-💡 Project Architecture
+### Espace utilisateur (`EspaceUser`)
+- **Réclamer un service** : formulaire de réclamation avec ajout d'une capture d'écran
+- **Noter un article** : ajout d'un avis avec une note
 
-✨ Key Features
+### Gestion des réclamations
+- Liste, ajout, modification et suppression des réclamations
+- **Changement de statut** (`StatusReclamation`) avec **notification du client par e-mail** (JavaMail, SMTP)
 
-💻 Technology Stack
+### Gestion des avis
+- Liste, ajout, modification et suppression des avis
+- Filtrage des avis par article
 
-📂 File Structure (JavaFX Client)
+### Réponses
+- Gestion des réponses envoyées aux réclamations (`GestionReponse`)
 
-⚙️ Setup and Execution
+## Stack technique
 
-🤝 Contribution
+| Élément | Technologie |
+|---|---|
+| Langage | Java 8+ |
+| Interface | JavaFX + FXML (Scene Builder) |
+| Accès aux données | JDBC (singleton `DataSource`) |
+| Base de données | MySQL, partagée avec l'application Symfony |
+| E-mail | JavaMail (SMTP Gmail, port 587, STARTTLS) |
 
-💡 Project Architecture
+## Architecture
 
-This is a distributed application built on a robust client-server model:
+```
+Entités       Reclamation, Avis, Reponse
+Services      ServiceReclamation, ServiceAvis, ServiceReponse   (CRUD JDBC)
+Contrôleurs   *Controller.java                                  (logique des écrans)
+Vues          *.fxml                                            (écrans JavaFX)
+Utilitaires   MailService                                       (envoi d'e-mails)
+Main.java     Point d'entrée, ouvre GestionReclamation.fxml
+```
 
-Backend (Symfony):
+## Lancer le projet
 
-Manages all business logic and data persistence via a MySQL database.
+1. Importer les sources dans un projet JavaFX (NetBeans, IntelliJ ou Eclipse) avec le SDK JavaFX et le connecteur **MySQL Connector/J**.
+2. Ajouter une classe `Tools.DataSource` (singleton JDBC, non incluse dans ce dépôt) pointant vers la base MySQL qui contient les tables `reclamation`, `avis` et `reponse`.
+3. Renseigner l'adresse et le mot de passe d'application SMTP dans `MailService.java`.
+4. Lancer `Main.java`.
 
-Exposes secure data access through a RESTful JSON API.
+## Auteur
 
-Frontend (JavaFX):
-
-A rich, cross-platform desktop client developed in Java.
-
-It securely consumes the RESTful JSON API to display and manipulate data.
-
-✨ Key Features
-
-User Space (EspaceUser): The main dashboard for authenticated users to view, add, modify, and delete their personal reviews and claims.
-
-Administration Interfaces: Dedicated screens for managing global data:
-
-Management of all Avis (Reviews).
-
-Management of all Réclamations (Claims).
-
-Management of Réponses (Replies) to claims.
-
-Claim Tracking: Users can track the status and history related to their claims (StatusReclamation).
-
-Email Notification: Integrated email notification system via MailService.java (functionality handled on the Symfony backend).
-
-💻 Technology Stack
-
-Component
-
-Technology
-
-Role in Project
-
-Backend
-
-Symfony (PHP)
-
-Core API and database management.
-
-Frontend
-
-JavaFX
-
-Desktop client UI development.
-
-Persistence
-
-MySQL
-
-Primary data storage.
-
-Language
-
-Java
-
-Programming language for the client-side logic.
-
-UI Markup
-
-FXML
-
-Declarative UI definitions (Views).
-
-Data Protocol
-
-RESTful JSON
-
-High-performance, standardized API communication.
-
-📂 File Structure (JavaFX Client)
-
-The JavaFX component follows an MVC (Model-View-Controller) pattern:
-
-File Type
-
-Example Files
-
-Description
-
-Controllers
-
-AjouterAvisController.java, EspaceUserController.java
-
-Handles screen events, logic, and service calls.
-
-Views
-
-AjouterAvis.fxml, EspaceUser.fxml
-
-Defines the graphical layout and elements.
-
-Models
-
-Avis.java, Reclamation.java, Reponse.java
-
-POJOs (Plain Old Java Objects) representing the core business entities.
-
-Services
-
-ServiceAvis.java, ServiceReclamation.java
-
-CRITICAL: Handles communication and data manipulation via the Symfony API.
-
-Entry Point
-
-Main.java
-
-Launches the JavaFX application.
-
-⚙️ Setup and Execution
-
-To run the full system, both the Symfony API and the JavaFX client must be running simultaneously.
-
-1. Backend Setup (Symfony API)
-
-(Note: This assumes your Symfony project files are in a separate directory or repository.)
-
-Install Dependencies: Navigate to your Symfony project root and run:
-
-composer install
-
-
-Configure Database: Set up your MySQL credentials in the Symfony's .env file.
-
-Run Migrations: Execute the following command to set up the database schema:
-
-php bin/console doctrine:migrations:migrate
-
-
-Start Server: Start the Symfony local web server:
-
-symfony server:start
-
-
-CRITICAL: Note the URL (e.g., http://localhost:8000). This must be the target for the JavaFX client.
-
-2. Frontend Setup (JavaFX Client)
-
-API Endpoint Check: Verify that the base URL configured in your Service*.java files (e.g., ServiceAvis.java) matches the address where your Symfony API is running.
-
-Import Project: Import the project into your Java IDE (e.g., IntelliJ, Eclipse).
-
-Configure JDK/JavaFX: Ensure your IDE is using a compatible JDK (e.g., JDK 17+) and the JavaFX modules are correctly linked using VM arguments:
-
---module-path /path/to/javafx-sdk/lib --add-modules javafx.controls,javafx.fxml,javafx.graphics
-
-
-Run: Launch the application by running Main.java.
-
-🤝 Contribution
-
-Feel free to open issues or submit pull requests. All suggested improvements, feature additions, or bug fixes are welcome!
+**Yosra Dab** — Ingénieure logiciel Full Stack · [Portfolio](https://yosradab.vercel.app) · [GitHub](https://github.com/yosradab) · [LinkedIn](https://linkedin.com/in/yosradab)
